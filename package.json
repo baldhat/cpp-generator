@@ -1,0 +1,82 @@
+{
+  "name": "cpp-class-generator",
+  "displayName": "cpp-class-generator",
+  "description": "Create C++ .cpp and .hpp files for a class",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.107.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:cpp-generator.createClass"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "C++ Generator Settings",
+      "properties": {
+        "cppGenerator.hppTemplate": {
+          "type": "string",
+          "default": "/*\n * Author: {{AUTHOR_NAME}} <{{AUTHOR_EMAIL}}>\n * Date: {{DATE}}\n */\n\n#ifndef {{INCLUDE_GUARD}}\n#define {{INCLUDE_GUARD}}\n\nnamespace {{NAMESPACE}} {\n\nclass {{CLASS_NAME}} {\npublic:\n    {{CLASS_NAME}}();\n    virtual ~{{CLASS_NAME}}();\n\n    // Rule of 5\n    {{CLASS_NAME}}(const {{CLASS_NAME}}& other) = default;\n    {{CLASS_NAME}}& operator=(const {{CLASS_NAME}}& other) = default;\n    {{CLASS_NAME}}({{CLASS_NAME}}&& other) noexcept = default;\n    {{CLASS_NAME}}& operator=({{CLASS_NAME}}&& other) noexcept = default;\n};\n\n} // namespace {{NAMESPACE}}\n\n#endif // {{INCLUDE_GUARD}}\n",
+          "description": "Full template for the .hpp file including Rule of 5."
+        },
+        "cppGenerator.cppTemplate": {
+          "type": "string",
+          "default": "/*\n * Author: {{AUTHOR_NAME}} <{{AUTHOR_EMAIL}}>\n * Date: {{DATE}}\n */\n\n#include \"{{FILE_NAME}}.hpp\"\n\nnamespace {{NAMESPACE}} {\n\n{{CLASS_NAME}}::{{CLASS_NAME}}() {\n}\n\n{{CLASS_NAME}}::~{{CLASS_NAME}}() {\n}\n\n} // namespace {{NAMESPACE}}\n",
+          "description": "Full template for the .cpp file."
+        },
+        "cppGenerator.dateFormat": {
+          "type": "string",
+          "default": "YYYY-MM-DD",
+          "description": "The format for the {{DATE}} placeholder. Use YYYY, MM, and DD."
+        },
+        "cppGenerator.interfaceHppTemplate": {
+          "type": "string",
+          "default": "/*\n * Author: {{AUTHOR_NAME}}\n * Date: {{DATE}}\n */\n\n#ifndef {{INCLUDE_GUARD}}\n#define {{INCLUDE_GUARD}}\n\nnamespace {{NAMESPACE}} {\n\nclass {{CLASS_NAME}} {\npublic:\n    virtual ~{{CLASS_NAME}}() = default;\n    virtual void execute() = 0; \n};\n\n} // namespace {{NAMESPACE}}\n\n#endif // {{INCLUDE_GUARD}}\n",
+          "description": "Template for Interface (abstract) classes."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "cpp-generator.createClass",
+        "title": "C++: Create Class from Template"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "cpp-generator.createClass",
+        "key": "ctrl+alt+n",
+        "when": "editorTextFocus"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "cpp-generator.createClass",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.107.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "typescript-eslint": "^8.52.0",
+    "eslint": "^9.39.2",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
